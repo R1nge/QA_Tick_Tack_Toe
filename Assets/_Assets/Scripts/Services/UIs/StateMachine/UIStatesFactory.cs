@@ -7,10 +7,7 @@ namespace _Assets.Scripts.Services.UIs.StateMachine
     {
         private readonly UIFactory _uiFactory;
 
-        private UIStatesFactory(UIFactory uiFactory)
-        {
-            _uiFactory = uiFactory;
-        }
+        private UIStatesFactory(UIFactory uiFactory) => _uiFactory = uiFactory;
 
         public IAsyncState CreateState(UIStateType uiStateType, UIStateMachine uiStateMachine)
         {
@@ -20,6 +17,10 @@ namespace _Assets.Scripts.Services.UIs.StateMachine
                     return new UILoadingState(_uiFactory, uiStateMachine);
                 case UIStateType.Game:
                     return new UIGameState(_uiFactory);
+                case UIStateType.Win:
+                    return new UIWinState(_uiFactory);
+                case UIStateType.Draw:
+                    return new UIDrawState(_uiFactory);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(uiStateType), uiStateType, null);
             }

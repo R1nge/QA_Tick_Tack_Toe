@@ -1,3 +1,4 @@
+using System;
 using _Assets.Scripts.Services.UIs.StateMachine;
 using Cysharp.Threading.Tasks;
 
@@ -9,6 +10,8 @@ namespace _Assets.Scripts.Gameplay
         public Team CurrentTeam => _currentTeam;
         private Team _currentTeam = Team.O;
         private readonly Team[,] _board = new Team[3, 3];
+        
+        public event Action OnTurnCompleted; 
 
         private TurnService(UIStateMachine uiStateMachine)
         {
@@ -27,10 +30,12 @@ namespace _Assets.Scripts.Gameplay
             }
         }
 
-        public void MakeTurn(int x, int y)
+        public Team MakeTurn(int x, int y)
         {
+            var currentTeam = _currentTeam;
             _board[x, y] = _currentTeam;
             SwitchTeam();
+            OnTurnCompleted?.Invoke();
 
             if (CalculateWinner())
             {
@@ -40,6 +45,8 @@ namespace _Assets.Scripts.Gameplay
             {
                 _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
             }
+
+            return currentTeam;
         }
 
         private bool CalculateWinner()

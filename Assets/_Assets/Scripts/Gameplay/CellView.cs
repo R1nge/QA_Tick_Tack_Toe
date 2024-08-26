@@ -17,8 +17,13 @@ namespace _Assets.Scripts.Gameplay
 
         public void MakeTurn()
         {
-            _turnService.MakeTurn(position.x, position.y);
-            _currentTeam = _turnService.CurrentTeam;
+            if (_currentTeam != TurnService.Team.None)
+            {
+                Debug.LogWarning($"Already has a team on the cell with position {position.x} {position.y}");
+                return;
+            }
+
+            _currentTeam = _turnService.MakeTurn(position.x, position.y);
             UpdateView();
         }
 

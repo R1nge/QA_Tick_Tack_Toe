@@ -28,6 +28,10 @@ namespace _Assets.Scripts.Services.UIs
                     return _objectResolver.Instantiate(_configProvider.UIConfig.LoadingUI);
                 case UIStateType.Game:
                     return _objectResolver.Instantiate(_configProvider.UIConfig.GameUI);
+                case UIStateType.Win:
+                    return _objectResolver.Instantiate(_configProvider.UIConfig.WinUI);
+                case UIStateType.Draw:
+                    return _objectResolver.Instantiate(_configProvider.UIConfig.DrawUI);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(uiStateType), uiStateType, null);
             }
