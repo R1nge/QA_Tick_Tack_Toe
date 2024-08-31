@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using _Assets.Scripts.Services.UIs.StateMachine;
 using _Assets.Scripts.Services.Web;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace _Assets.Scripts.Gameplay
 {
@@ -13,8 +14,8 @@ namespace _Assets.Scripts.Gameplay
         public Team CurrentTeam => _currentTeam;
         private Team _currentTeam = Team.O;
         private readonly Team[,] _board = new Team[3, 3];
-        
-        public event Action OnTurnCompleted; 
+
+        public event Action OnTurnCompleted;
 
         private TurnService(UIStateMachine uiStateMachine, WebRequestsService webRequestsService)
         {
@@ -50,7 +51,15 @@ namespace _Assets.Scripts.Gameplay
                 _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
             }
 
-            await _webRequestsService.GetWeather();
+            var req = await _webRequestsService.GetBoard(x, y, (int)currentTeam);
+            
+            foreach (var list in req)
+            {
+                foreach (var team in list)
+                {
+                    Debug.Log(team);
+                }
+            }
 
             return currentTeam;
         }
@@ -88,7 +97,7 @@ namespace _Assets.Scripts.Gameplay
 
             return false;
         }
-        
+
         private bool IsDraw()
         {
             for (int i = 0; i < 3; i++)
@@ -101,9 +110,10 @@ namespace _Assets.Scripts.Gameplay
                     }
                 }
             }
+
             return true;
         }
-        
+
         public enum Team
         {
             None,

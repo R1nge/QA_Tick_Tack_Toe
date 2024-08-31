@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using _Assets.Scripts.Gameplay;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -9,19 +10,29 @@ namespace _Assets.Scripts.Services.Web
 {
     public class WebRequestsService
     {
-        public async Task<List<Weather>> GetWeather()
+        public Task<List<List<TurnService.Team>>> GetBoard(int x, int y, int team)
         {
-            var req = await SendGetRequest<List<Weather>>("https://localhost:44335/weatherforecast", null);
-            Debug.Log(req[0].summary);
+            var req = SendPostRequest<MakeATurnRequest, List<List<TurnService.Team>>>($"https://localhost:44335/maketurn{x},{y},{team}", new MakeATurnRequest(x, y, team), new Dictionary<string, string>());
             return req;
         }
-
-        public class Weather
+        
+        public class MakeATurnRequest
         {
-            public string date { get; set; }
-            public string temperatureC { get; set; }
-            public string summary { get; set; }
-            public string temperatureF { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Team { get; set; }
+
+            public MakeATurnRequest(int x, int y, int team)
+            {
+                X = x;
+                Y = y;
+                Team = team;
+            }
+        }
+
+        public class MakeATurnResponse
+        {
+            
         }
 
         private async Task<TResponse> SendPostRequest<TRequest, TResponse>(string url, TRequest request,
