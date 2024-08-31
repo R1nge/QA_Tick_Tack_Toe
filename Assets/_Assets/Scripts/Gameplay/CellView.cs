@@ -15,7 +15,7 @@ namespace _Assets.Scripts.Gameplay
 
         private void Awake() => button.onClick.AddListener(MakeTurn);
 
-        public void MakeTurn()
+        public async void MakeTurn()
         {
             if (_currentTeam != TurnService.Team.None)
             {
@@ -23,7 +23,7 @@ namespace _Assets.Scripts.Gameplay
                 return;
             }
 
-            _currentTeam = _turnService.MakeTurn(position.x, position.y);
+            _currentTeam = await _turnService.MakeTurn(position.x, position.y);
             UpdateView();
         }
 

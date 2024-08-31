@@ -1,4 +1,5 @@
 using _Assets.Scripts.Configs;
+using _Assets.Scripts.Services.Web;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,6 +14,7 @@ namespace _Assets.Scripts.CompositionRoot
         {
             builder.RegisterComponent(configProvider);
             builder.Register<SceneSerivce>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<WebRequestsService>(Lifetime.Singleton);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using _Assets.Scripts.Services.UIs.StateMachine;
+using _Assets.Scripts.Services.Web;
 using Cysharp.Threading.Tasks;
 
 namespace _Assets.Scripts.Gameplay
@@ -7,15 +9,17 @@ namespace _Assets.Scripts.Gameplay
     public class TurnService
     {
         private readonly UIStateMachine _uiStateMachine;
+        private readonly WebRequestsService _webRequestsService;
         public Team CurrentTeam => _currentTeam;
         private Team _currentTeam = Team.O;
         private readonly Team[,] _board = new Team[3, 3];
         
         public event Action OnTurnCompleted; 
 
-        private TurnService(UIStateMachine uiStateMachine)
+        private TurnService(UIStateMachine uiStateMachine, WebRequestsService webRequestsService)
         {
             _uiStateMachine = uiStateMachine;
+            _webRequestsService = webRequestsService;
         }
 
         private void SwitchTeam()
@@ -30,7 +34,7 @@ namespace _Assets.Scripts.Gameplay
             }
         }
 
-        public Team MakeTurn(int x, int y)
+        public async Task<Team> MakeTurn(int x, int y)
         {
             var currentTeam = _currentTeam;
             _board[x, y] = _currentTeam;
@@ -45,6 +49,8 @@ namespace _Assets.Scripts.Gameplay
             {
                 _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
             }
+
+            await _webRequestsService.GetWeather();
 
             return currentTeam;
         }
