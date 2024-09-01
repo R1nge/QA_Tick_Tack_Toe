@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Assets.Scripts.Services.UIs.StateMachine;
 using _Assets.Scripts.Services.Web;
@@ -14,6 +15,7 @@ namespace _Assets.Scripts.Gameplay
         public Team CurrentTeam => _currentTeam;
         private Team _currentTeam = Team.O;
         private readonly Team[,] _board = new Team[3, 3];
+        private readonly List<CellView> _cells = new List<CellView>();
 
         public event Action OnTurnCompleted;
 
@@ -21,6 +23,16 @@ namespace _Assets.Scripts.Gameplay
         {
             _uiStateMachine = uiStateMachine;
             _webRequestsService = webRequestsService;
+        }
+
+        public void AddCell(CellView cellView)
+        {
+            _cells.Add(cellView);
+        }
+
+        public void RemoveCell(CellView cellView)
+        {
+            _cells.Remove(cellView);
         }
 
         private void SwitchTeam()
@@ -51,17 +63,23 @@ namespace _Assets.Scripts.Gameplay
                 _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
             }
 
-            var req = await _webRequestsService.GetBoard(x, y, (int)currentTeam);
-            
-            foreach (var list in req)
-            {
-                foreach (var team in list)
-                {
-                    Debug.Log(team);
-                }
-            }
+            await _webRequestsService.MakeTurn(x, y, (int)currentTeam);
+            await UpdateBoard();
 
             return currentTeam;
+        }
+
+        public async Task UpdateBoard()
+        {
+            var board = await _webRequestsService.GetBoard();
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    _cells[i * 3 + j].SetTeam(board[i][j]);
+                }
+            }
         }
 
         private bool CalculateWinner()

@@ -23,11 +23,17 @@ namespace _Assets.Scripts.Gameplay
                 return;
             }
 
-            _currentTeam = await _turnService.MakeTurn(position.x, position.y);
+            await _turnService.MakeTurn(position.x, position.y);
+            UpdateView();
+        }
+        
+        public void SetTeam(TurnService.Team team)
+        {
+            _currentTeam = team;
             UpdateView();
         }
 
-        private void UpdateView()
+        public void UpdateView()
         {
             if (_currentTeam == TurnService.Team.X)
             {

@@ -10,9 +10,15 @@ namespace _Assets.Scripts.Services.Web
 {
     public class WebRequestsService
     {
-        public Task<List<List<TurnService.Team>>> GetBoard(int x, int y, int team)
+        public Task<List<List<TurnService.Team>>> MakeTurn(int x, int y, int team)
         {
             var req = SendPostRequest<MakeATurnRequest, List<List<TurnService.Team>>>($"https://localhost:44335/maketurn{x},{y},{team}", new MakeATurnRequest(x, y, team), new Dictionary<string, string>());
+            return req;
+        }
+        
+        public Task<List<List<TurnService.Team>>> GetBoard()
+        {
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"https://localhost:44335/getboard", new Dictionary<string, string>());
             return req;
         }
         
