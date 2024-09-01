@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using _Assets.Scripts.Gameplay;
 using _Assets.Scripts.Services.Web;
 using TMPro;
@@ -10,6 +12,9 @@ namespace _Assets.Scripts.Services.UIs
     {
         [SerializeField] private TextMeshProUGUI currentTeam;
         [SerializeField] private CellView[] cellViews;
+        [SerializeField] private TextMeshProUGUI timerText;
+        private float _time = 0f;
+        private readonly float _updateTime = 1f;
         [Inject] private TurnService _turnService;
         [Inject] private WebRequestsService _webRequestsService;
 
@@ -23,9 +28,27 @@ namespace _Assets.Scripts.Services.UIs
             }
 
             ShowCurrentTeam();
+        }
 
-            var board = await _webRequestsService.GetBoard();
-            
+        private async void Update()
+        {
+            if (_time <= 0)
+            {
+                _time = _updateTime;
+                await Sync();
+            }
+            else
+            {
+                _time -= Time.deltaTime;
+            }
+
+            timerText.text = $"Time before sync: " + _time.ToString("0.00");
+        }
+
+        private async Task Sync()
+        {
+           var board = await _webRequestsService.GetBoard();
+
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -34,6 +57,11 @@ namespace _Assets.Scripts.Services.UIs
                     _turnService.SetTeam(i, j, board[i][j]);
                 }
             }
+
+            var team = await _webRequestsService.GetLastTeam();
+            _turnService.SetTeam(team);
+            ShowCurrentTeam();
+            _turnService.CheckWinOrDraw();
         }
 
         private void ShowCurrentTeam() => currentTeam.text = "Current Team: " + _turnService.CurrentTeam;

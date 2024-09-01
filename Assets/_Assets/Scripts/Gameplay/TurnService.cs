@@ -52,34 +52,29 @@ namespace _Assets.Scripts.Gameplay
             }
         }
 
+        public void SetTeam(Team team)
+        {
+            _currentTeam = team;
+        }
+
         public void SetTeam(int x, int y, Team team)
         {
-            _board[x,y] = team;
+            _board[x, y] = team;
         }
 
-        public async Task<Team> MakeTurn(int x, int y)
+        public async Task MakeTurn(int x, int y)
         {
-            var currentTeam = _currentTeam;
-            _board[x, y] = _currentTeam;
-            SwitchTeam();
-            OnTurnCompleted?.Invoke();
-
-            if (CalculateWinner())
+            if (!CheckWinOrDraw())
             {
-                _uiStateMachine.SwitchState(UIStateType.Win).Forget();
-            }
-            else if (IsDraw())
-            {
-                _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
-            }
+                SwitchTeam();
+                OnTurnCompleted?.Invoke();
 
-            await _webRequestsService.MakeTurn(x, y, (int)currentTeam);
-            await UpdateBoard();
-
-            return currentTeam;
+                await _webRequestsService.MakeTurn(x, y);
+                await UpdateBoard();
+            }
         }
 
-        public async Task UpdateBoard()
+        private async Task UpdateBoard()
         {
             var board = await _webRequestsService.GetBoard();
 
@@ -90,9 +85,27 @@ namespace _Assets.Scripts.Gameplay
                     _cells[i * 3 + j].SetTeam(board[i][j]);
                 }
             }
+
+            CheckWinOrDraw();
         }
 
-        private bool CalculateWinner()
+        public bool CheckWinOrDraw()
+        {
+            if (CalculateWinner())
+            {
+                _uiStateMachine.SwitchState(UIStateType.Win).Forget();
+                return true;
+            }
+            else if (IsDraw())
+            {
+                _uiStateMachine.SwitchState(UIStateType.Draw).Forget();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool CalculateWinner()
         {
             // Check rows
             for (int i = 0; i < 3; i++)
@@ -126,7 +139,7 @@ namespace _Assets.Scripts.Gameplay
             return false;
         }
 
-        private bool IsDraw()
+        public bool IsDraw()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -145,8 +158,8 @@ namespace _Assets.Scripts.Gameplay
         public enum Team : byte
         {
             None = 0,
-            X = 1,
-            O = 2
+            O = 1,
+            X = 2
         }
     }
 }
