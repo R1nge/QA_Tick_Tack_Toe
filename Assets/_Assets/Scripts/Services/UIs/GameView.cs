@@ -31,6 +31,7 @@ namespace _Assets.Scripts.Services.UIs
                 for (int j = 0; j < 3; j++)
                 {
                     cellViews[i * 3 + j].SetTeam(board[i][j]);
+                    _turnService.SetTeam(i, j, board[i][j]);
                 }
             }
         }

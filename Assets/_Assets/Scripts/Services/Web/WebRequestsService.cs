@@ -22,6 +22,12 @@ namespace _Assets.Scripts.Services.Web
             return req;
         }
         
+        public Task<List<List<TurnService.Team>>> ResetBoard()
+        {
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"https://localhost:44335/resetboard", new Dictionary<string, string>());
+            return req;
+        }
+        
         public class MakeATurnRequest
         {
             public int X { get; set; }

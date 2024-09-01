@@ -35,6 +35,11 @@ namespace _Assets.Scripts.Gameplay
             _cells.Remove(cellView);
         }
 
+        public void ResetBoard()
+        {
+            _cells.Clear();
+        }
+
         private void SwitchTeam()
         {
             if (_currentTeam == Team.O)
@@ -45,6 +50,11 @@ namespace _Assets.Scripts.Gameplay
             {
                 _currentTeam = Team.O;
             }
+        }
+
+        public void SetTeam(int x, int y, Team team)
+        {
+            _board[x,y] = team;
         }
 
         public async Task<Team> MakeTurn(int x, int y)
@@ -132,11 +142,11 @@ namespace _Assets.Scripts.Gameplay
             return true;
         }
 
-        public enum Team
+        public enum Team : byte
         {
-            None,
-            X,
-            O
+            None = 0,
+            X = 1,
+            O = 2
         }
     }
 }
