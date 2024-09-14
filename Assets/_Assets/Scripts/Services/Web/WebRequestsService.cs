@@ -10,27 +10,29 @@ namespace _Assets.Scripts.Services.Web
 {
     public class WebRequestsService
     {
+        
+        private readonly string _baseUrl = "http://213.178.155.172/api";
         public Task<List<List<TurnService.Team>>> MakeTurn(int x, int y)
         {
-            var req = SendPostRequest<MakeATurnRequest, List<List<TurnService.Team>>>($"https://localhost:44335/maketurn{x},{y}", new MakeATurnRequest(x, y), new Dictionary<string, string>());
+            var req = SendPostRequest<MakeATurnRequest, List<List<TurnService.Team>>>($"{_baseUrl}/maketurn{x},{y}", new MakeATurnRequest(x, y), new Dictionary<string, string>());
             return req;
         }
         
         public Task<List<List<TurnService.Team>>> GetBoard()
         {
-            var req = SendGetRequest<List<List<TurnService.Team>>>($"https://localhost:44335/getboard", new Dictionary<string, string>());
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/getboard", new Dictionary<string, string>());
             return req;
         }
         
         public Task<List<List<TurnService.Team>>> ResetBoard()
         {
-            var req = SendGetRequest<List<List<TurnService.Team>>>($"https://localhost:44335/resetboard", new Dictionary<string, string>());
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/resetboard", new Dictionary<string, string>());
             return req;
         }
 
         public Task<TurnService.Team> GetLastTeam()
         {
-            var req = SendGetRequest<TurnService.Team>($"https://localhost:44335/getlastteam", new Dictionary<string, string>());
+            var req = SendGetRequest<TurnService.Team>($"{_baseUrl}/getlastteam", new Dictionary<string, string>());
             return req;
         }
         
