@@ -25,7 +25,13 @@ namespace _Assets.Scripts.Services.Audio
                 Debug.LogWarning("Meme already played");
                 return;
             }
-            
+
+            if (audioSource.isPlaying)
+            {
+                Debug.LogError("Meme already playing");
+                return;
+            }
+
             _lastMeme = memeType;
             AudioClip meme = null;
             switch (memeType)
