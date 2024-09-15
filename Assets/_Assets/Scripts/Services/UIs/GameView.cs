@@ -13,8 +13,8 @@ namespace _Assets.Scripts.Services.UIs
         [SerializeField] private TextMeshProUGUI currentTeam;
         [SerializeField] private CellView[] cellViews;
         [SerializeField] private TextMeshProUGUI timerText;
+        [SerializeField] private float updateTime = 0.1f;
         private float _time = 0f;
-        private readonly float _updateTime = 0.1f;
         [Inject] private TurnService _turnService;
         [Inject] private WebRequestsService _webRequestsService;
 
@@ -34,7 +34,7 @@ namespace _Assets.Scripts.Services.UIs
         {
             if (_time <= 0)
             {
-                _time = _updateTime;
+                _time = updateTime;
                 await Sync();
             }
             else
@@ -47,8 +47,8 @@ namespace _Assets.Scripts.Services.UIs
 
         private async Task Sync()
         {
-           var board = await _webRequestsService.GetBoard();
-           await _webRequestsService.GetLastTurn();
+            var board = await _webRequestsService.GetBoard();
+            await _webRequestsService.GetLastTurn();
 
             for (int i = 0; i < 3; i++)
             {
