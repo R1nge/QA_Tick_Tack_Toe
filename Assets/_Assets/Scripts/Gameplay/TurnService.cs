@@ -66,7 +66,7 @@ namespace _Assets.Scripts.Gameplay
         {
             if (!CheckWinOrDraw())
             {
-                SwitchTeam();
+                //SwitchTeam();
                 OnTurnCompleted?.Invoke();
 
                 await _webRequestsService.MakeTurn(x, y);

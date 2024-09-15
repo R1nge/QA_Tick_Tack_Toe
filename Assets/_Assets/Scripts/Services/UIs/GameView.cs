@@ -14,7 +14,7 @@ namespace _Assets.Scripts.Services.UIs
         [SerializeField] private CellView[] cellViews;
         [SerializeField] private TextMeshProUGUI timerText;
         private float _time = 0f;
-        private readonly float _updateTime = 1f;
+        private readonly float _updateTime = 0.1f;
         [Inject] private TurnService _turnService;
         [Inject] private WebRequestsService _webRequestsService;
 
