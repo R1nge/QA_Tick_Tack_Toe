@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c3385369274385bdf16d86b69c1160, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: 
+  sixtyNine:
+  - {fileID: 8300000, guid: 47a0f6ddd9b76784d87b5f876caf48b7, type: 3}
+  - {fileID: 8300000, guid: ff518224cde0b9642be8f2a5a9ae2d3d, type: 3}
+  holy:
+  - {fileID: 8300000, guid: 4ad9a7ce0477cc240b37cbfcdc6cf36d, type: 3}
+  devil:
+  - {fileID: 8300000, guid: 8cac9097fa7c55e4982099bffc62b648, type: 3}
+  leet:
+  - {fileID: 8300000, guid: d501cf4fd53d17d4298ddc693edce922, type: 3}

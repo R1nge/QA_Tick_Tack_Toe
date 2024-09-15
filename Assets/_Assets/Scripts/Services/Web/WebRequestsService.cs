@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using _Assets.Scripts.Gameplay;
+using _Assets.Scripts.Services.Audio;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,23 +12,48 @@ namespace _Assets.Scripts.Services.Web
 {
     public class WebRequestsService
     {
-        
+        public event Action<AudioService.MemeType> OnMeme;
         private readonly string _baseUrl = "http://213.178.155.172/api";
-        public Task<List<List<TurnService.Team>>> MakeTurn(int x, int y)
+
+        public async Task<MakeATurnResponse> MakeTurn(int x, int y)
         {
-            var req = SendPostRequest<MakeATurnRequest, List<List<TurnService.Team>>>($"{_baseUrl}/maketurn{x},{y}", new MakeATurnRequest(x, y), new Dictionary<string, string>());
+            var req = await SendPostRequest<MakeATurnRequest, MakeATurnResponse>($"{_baseUrl}/maketurn{x},{y}",
+                new MakeATurnRequest(x, y), new Dictionary<string, string>());
+
+            if (req.error_code != null && req.error_code.Length > 0)
+            {
+                if (req.error_code == "69")
+                {
+                    OnMeme?.Invoke(AudioService.MemeType.SixtyNine);
+                }
+                else if (req.error_code == "666")
+                {
+                    OnMeme?.Invoke(AudioService.MemeType.Holy);
+                }
+                else if (req.error_code == "999")
+                {
+                    OnMeme?.Invoke(AudioService.MemeType.Devil);
+                }
+                else if (req.error_code == "1337")
+                {
+                    OnMeme?.Invoke(AudioService.MemeType.Leet);
+                }
+            }
+
             return req;
         }
-        
+
         public Task<List<List<TurnService.Team>>> GetBoard()
         {
-            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/getboard", new Dictionary<string, string>());
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/getboard",
+                new Dictionary<string, string>());
             return req;
         }
-        
+
         public Task<List<List<TurnService.Team>>> ResetBoard()
         {
-            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/resetboard", new Dictionary<string, string>());
+            var req = SendGetRequest<List<List<TurnService.Team>>>($"{_baseUrl}/resetboard",
+                new Dictionary<string, string>());
             return req;
         }
 
@@ -35,7 +62,8 @@ namespace _Assets.Scripts.Services.Web
             var req = SendGetRequest<TurnService.Team>($"{_baseUrl}/getlastteam", new Dictionary<string, string>());
             return req;
         }
-        
+
+        [Serializable]
         public class MakeATurnRequest
         {
             public int X { get; set; }
@@ -49,9 +77,12 @@ namespace _Assets.Scripts.Services.Web
             }
         }
 
+        [Serializable]
         public class MakeATurnResponse
         {
-            
+            public List<List<TurnService.Team>> Board { get; set; }
+            public string error { get; set; }
+            public string error_code { get; set; }
         }
 
         private async Task<TResponse> SendPostRequest<TRequest, TResponse>(string url, TRequest request,

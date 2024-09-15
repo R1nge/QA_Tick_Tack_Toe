@@ -63,3 +63,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiConfig: {fileID: 11400000, guid: c01c0ec4a5855f641b051cf97763b193, type: 2}
+  audioConfig: {fileID: 11400000, guid: 8cdf88ad603ff6345ac6488bc824dbaa, type: 2}
