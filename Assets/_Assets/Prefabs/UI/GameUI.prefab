@@ -370,6 +370,7 @@ MonoBehaviour:
   - {fileID: 6218247448015055595}
   - {fileID: 6718395469924345500}
   timerText: {fileID: 7355250657366306351}
+  updateTime: 0.1
 --- !u!1 &8562400665842632290
 GameObject:
   m_ObjectHideFlags: 0
