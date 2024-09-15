@@ -20,26 +20,6 @@ namespace _Assets.Scripts.Services.Web
             var req = await SendPostRequest<MakeATurnRequest, MakeATurnResponse>($"{_baseUrl}/maketurn{x},{y}",
                 new MakeATurnRequest(x, y), new Dictionary<string, string>());
 
-            if (req.error_code != null && req.error_code.Length > 0)
-            {
-                if (req.error_code == "69")
-                {
-                    OnMeme?.Invoke(AudioService.MemeType.SixtyNine);
-                }
-                else if (req.error_code == "666")
-                {
-                    OnMeme?.Invoke(AudioService.MemeType.Holy);
-                }
-                else if (req.error_code == "999")
-                {
-                    OnMeme?.Invoke(AudioService.MemeType.Devil);
-                }
-                else if (req.error_code == "1337")
-                {
-                    OnMeme?.Invoke(AudioService.MemeType.Leet);
-                }
-            }
-
             return req;
         }
 
@@ -63,6 +43,33 @@ namespace _Assets.Scripts.Services.Web
             return req;
         }
 
+        public async Task<LastTurnResponse> GetLastTurn()
+        {
+            var req = await SendGetRequest<LastTurnResponse>($"{_baseUrl}/getlastturn",
+                new Dictionary<string, string>());
+
+            if ((req.X == 6 && req.Y == 9) || (req.X == 69 && req.Y == 69) || (req.X == 69) || (req.Y == 69))
+            {
+                OnMeme?.Invoke(AudioService.MemeType.SixtyNine);
+            }
+            else if ((req.X == 666) || (req.Y == 666))
+            {
+                OnMeme?.Invoke(AudioService.MemeType.Holy);
+            }
+            else if (req.X == 999 || req.Y == 999)
+            {
+                OnMeme?.Invoke(AudioService.MemeType.Devil);
+            }
+            else if ((req.X == 1337 || req.Y == 1337) || (req.X == 13 && req.Y == 37))
+            {
+                OnMeme?.Invoke(AudioService.MemeType.Leet);
+            }
+            
+            Debug.Log("[GET LAST TURN] X: " + req.X + " Y: " + req.Y);
+
+            return req;
+        }
+
         [Serializable]
         public class MakeATurnRequest
         {
@@ -75,6 +82,13 @@ namespace _Assets.Scripts.Services.Web
                 X = x;
                 Y = y;
             }
+        }
+
+        [Serializable]
+        public class LastTurnResponse
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
         }
 
         [Serializable]

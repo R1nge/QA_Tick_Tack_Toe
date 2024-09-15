@@ -15,6 +15,7 @@ MonoBehaviour:
   sixtyNine:
   - {fileID: 8300000, guid: 47a0f6ddd9b76784d87b5f876caf48b7, type: 3}
   - {fileID: 8300000, guid: ff518224cde0b9642be8f2a5a9ae2d3d, type: 3}
+  - {fileID: 8300000, guid: 8cac9097fa7c55e4982099bffc62b648, type: 3}
   holy:
   - {fileID: 8300000, guid: 4ad9a7ce0477cc240b37cbfcdc6cf36d, type: 3}
   devil:

@@ -48,6 +48,7 @@ namespace _Assets.Scripts.Services.UIs
         private async Task Sync()
         {
            var board = await _webRequestsService.GetBoard();
+           await _webRequestsService.GetLastTurn();
 
             for (int i = 0; i < 3; i++)
             {

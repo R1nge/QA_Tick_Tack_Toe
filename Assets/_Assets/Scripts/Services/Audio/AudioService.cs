@@ -11,6 +11,7 @@ namespace _Assets.Scripts.Services.Audio
         [SerializeField] private AudioSource audioSource;
         [Inject] private ConfigProvider _configProvider;
         [Inject] private WebRequestsService _webRequestsService;
+        private MemeType _lastMeme = MemeType.None;
 
         private void Start()
         {
@@ -19,6 +20,13 @@ namespace _Assets.Scripts.Services.Audio
 
         public void Play(MemeType memeType)
         {
+            if (_lastMeme == memeType)
+            {
+                Debug.LogWarning("Meme already played");
+                return;
+            }
+            
+            _lastMeme = memeType;
             AudioClip meme = null;
             switch (memeType)
             {
@@ -48,10 +56,11 @@ namespace _Assets.Scripts.Services.Audio
 
         public enum MemeType : byte
         {
-            SixtyNine = 0,
-            Holy = 1,
-            Devil = 2,
-            Leet = 3
+            None = 0,
+            SixtyNine = 1,
+            Holy = 2,
+            Devil = 3,
+            Leet = 4
         }
     }
 }
